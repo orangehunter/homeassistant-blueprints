@@ -4,7 +4,7 @@ blueprint:
     Control lights with ZBMini R2 in detach mode:
     - First switch: Start 1-second timer
     - Second switch within 1 second: Cycle through brightness levels (default: 30%, 60%, 100%)
-    - No second switch: Turn off light when timer expires
+    - No second switch: Toggle light state when timer expires
     
     This blueprint uses a timer entity to avoid conflicts between multiple devices.
   domain: automation
@@ -103,7 +103,7 @@ action:
         timeout:
           seconds: 2
         continue_on_timeout: false
-      - service: light.turn_off
+      - service: light.toggle
         target:
           entity_id: !input target_light
 
