@@ -30,15 +30,26 @@ blueprint:
           domain: timer
     brightness_levels:
       name: Brightness Levels
-      description: Three brightness levels separated by commas (e.g., 30,60,100)
-      default: "30,60,100"
+      description: Three brightness levels separated by commas (e.g., 50,75,100)
+      default: "50,75,100"
       selector:
         text:
+    transition:
+      name: Transition Time
+      description: Transition time in seconds for brightness change
+      default: 1
+      selector:
+        number:
+          min: 0
+          max: 5
+          step: 0.1
+          unit_of_measurement: "s"
 
 variables:
   target_light: !input target_light
   timer_entity: !input timer_entity
   brightness_input: !input brightness_levels
+  transition_time: !input transition
   brightness_list: >
     {{ brightness_input.split(',') | map('trim') | map('int') | list }}
   current_brightness: >
@@ -78,6 +89,7 @@ action:
               entity_id: !input target_light
             data:
               brightness_pct: "{{ next_brightness_pct }}"
+              transition: "{{ transition_time }}"
     
     # Case 2: Timer is not active (first switch)
     default:
