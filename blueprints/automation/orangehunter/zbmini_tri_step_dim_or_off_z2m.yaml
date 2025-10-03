@@ -1,0 +1,105 @@
+blueprint:
+  name: ZBMini R2 Tri-Step Dimming or Off (Detach Mode - Zigbee2MQTT)
+  description: |
+    Control lights with ZBMini R2 in detach mode using Zigbee2MQTT:
+    - First switch: Start 1-second timer
+    - Second switch within 1 second: Cycle through brightness levels (default: 30%, 60%, 100%)
+    - No second switch: Turn off light when timer expires
+    
+    This blueprint uses a timer entity to avoid conflicts between multiple devices.
+  domain: automation
+  input:
+    zbmini_topic:
+      name: ZBMini R2 MQTT Topic
+      description: The MQTT topic for your ZBMini R2 (e.g., zigbee2mqtt/zbmini_living_room)
+      selector:
+        text:
+    target_light:
+      name: Target Light
+      description: The light entity to control
+      selector:
+        entity:
+          domain: light
+    timer_entity:
+      name: Timer Entity
+      description: Timer entity to use (must be created manually in configuration.yaml)
+      selector:
+        entity:
+          domain: timer
+    brightness_levels:
+      name: Brightness Levels
+      description: Three brightness levels separated by commas (e.g., 30,60,100)
+      default: "30,60,100"
+      selector:
+        text:
+
+variables:
+  target_light: !input target_light
+  timer_entity: !input timer_entity
+  brightness_input: !input brightness_levels
+  brightness_list: >
+    {{ brightness_input.split(',') | map('trim') | map('int') | list }}
+  current_brightness: >
+    {{ state_attr(target_light, 'brightness') | int(0) }}
+  current_brightness_pct: >
+    {{ (current_brightness / 255 * 100) | round(0) | int }}
+  next_brightness_index: >
+    {% set levels = brightness_list %}
+    {% set current_pct = current_brightness_pct %}
+    {% if current_pct == 0 or current_pct < levels[0] %}
+      0
+    {% elif current_pct >= levels[0] and current_pct < levels[1] %}
+      1
+    {% elif current_pct >= levels[1] and current_pct < levels[2] %}
+      2
+    {% else %}
+      0
+    {% endif %}
+  next_brightness_pct: >
+    {{ brightness_list[next_brightness_index] }}
+
+trigger:
+  - platform: mqtt
+    topic: !input zbmini_topic
+
+condition:
+  - condition: template
+    value_template: >
+      {{ trigger.payload_json.action in ['on', 'off', 'single', 'toggle'] }}
+
+action:
+  - choose:
+      # Case 1: Timer is active (second switch within 1 second)
+      - conditions:
+          - condition: state
+            entity_id: !input timer_entity
+            state: active
+        sequence:
+          - service: timer.cancel
+            target:
+              entity_id: !input timer_entity
+          - service: light.turn_on
+            target:
+              entity_id: !input target_light
+            data:
+              brightness_pct: "{{ next_brightness_pct }}"
+    
+    # Case 2: Timer is not active (first switch)
+    default:
+      - service: timer.start
+        target:
+          entity_id: !input timer_entity
+        data:
+          duration: "00:00:01"
+      - wait_for_trigger:
+          - platform: state
+            entity_id: !input timer_entity
+            to: idle
+        timeout:
+          seconds: 2
+        continue_on_timeout: false
+      - service: light.turn_off
+        target:
+          entity_id: !input target_light
+
+mode: restart

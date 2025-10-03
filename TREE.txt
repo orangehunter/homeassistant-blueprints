@@ -1,0 +1,17 @@
+homeassistant-blueprints
+├── .git
+├── .gitignore
+├── LICENSE
+├── README.md
+├── QUICKSTART.md
+├── GITHUB_SETUP.md
+├── PROJECT_STRUCTURE.md
+├── START_HERE.md
+├── replace-username.ps1
+├── blueprints
+│   └── automation
+│       └── orangehunter
+│           ├── zbmini_tri_step_dim_or_off.yaml
+│           └── zbmini_tri_step_dim_or_off_z2m.yaml
+└── examples
+    └── configuration.yaml

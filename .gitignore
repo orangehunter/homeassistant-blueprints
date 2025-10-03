@@ -1,0 +1,20 @@
+# Git 設定檔
+
+# 忽略系統檔案
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 忽略編輯器設定
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 忽略日誌檔案
+*.log
+
+# 忽略暫存檔案
+*.tmp
+*.bak
