@@ -11,6 +11,11 @@ blueprint:
     Note: You need to manually select the device action trigger when creating the automation.
   domain: automation
   input:
+    zbmini_trigger:
+      name: ZBMini Toggle Action
+      description: Select the toggle action from your ZBMini R2 device
+      selector:
+        trigger:
     target_light:
       name: Target Light
       description: The light entity to control
@@ -55,7 +60,7 @@ variables:
   next_brightness_pct: >
     {{ brightness_list[next_brightness_index] }}
 
-trigger: []
+trigger: !input zbmini_trigger
 
 action:
   - choose:
