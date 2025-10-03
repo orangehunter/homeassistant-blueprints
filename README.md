@@ -82,13 +82,21 @@ timer:
 
 ## 📖 使用說明
 
+> 💡 **重要提示**：此藍圖需要你手動選擇觸發條件，這樣可以提供更大的靈活性！
+> 
+> 詳細圖文說明請參考：[觸發條件設定指南 (TRIGGER_GUIDE.md)](TRIGGER_GUIDE.md)
+
 ### 建立自動化
 
 1. 進入 **設定** → **自動化與場景** → **藍圖**
 2. 找到 **ZBMini R2 Tri-Step Dimming or Off** 藍圖
 3. 點擊 **建立自動化**
-4. 設定以下參數：
-   - **ZBMini R2 Device**：選擇你的 ZBMini R2 裝置（ZHA 或 Zigbee2MQTT 都使用裝置選擇器）
+4. **⚠️ 手動新增觸發條件**（重要步驟）：
+   - 點擊 **新增觸發條件**
+   - 選擇 **裝置**
+   - 選擇你的 ZBMini R2 裝置
+   - 選擇觸發動作（推薦：**toggle**）
+5. 設定以下參數：
    - **Target Light**：選擇要控制的燈光
    - **Timer Entity**：選擇你建立的 timer（例如：`timer.zbmini_switch_timer`）
    - **Brightness Levels**：自訂亮度（例如：`30,60,100` 或 `20,50,80`）

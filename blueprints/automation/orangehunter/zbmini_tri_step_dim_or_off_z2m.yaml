@@ -7,16 +7,10 @@ blueprint:
     - No second switch: Toggle light state when timer expires
     
     This blueprint uses a timer entity to avoid conflicts between multiple devices.
+    
+    Note: You need to manually select the device action trigger when creating the automation.
   domain: automation
   input:
-    zbmini_device:
-      name: ZBMini R2 Device
-      description: Select the ZBMini R2 device (Zigbee2MQTT)
-      selector:
-        device:
-          integration: mqtt
-          manufacturer: SONOFF
-          model: ZBMINIR2
     target_light:
       name: Target Light
       description: The light entity to control
@@ -61,12 +55,7 @@ variables:
   next_brightness_pct: >
     {{ brightness_list[next_brightness_index] }}
 
-trigger:
-  - platform: device
-    device_id: !input zbmini_device
-    domain: mqtt
-    type: action
-    subtype: toggle
+trigger: []
 
 action:
   - choose:

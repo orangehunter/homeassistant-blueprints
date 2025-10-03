@@ -1,6 +1,53 @@
 # 更新記錄
 
-## 2025-10-03 更新
+## 2025-10-03 更新 v2
+
+### 修正 3：改為手動選擇 Action 來源
+**問題：** 在 Blueprint input 中預先定義裝置選擇器會限制使用者的靈活性。
+
+**修正：** 移除裝置選擇器，讓使用者在建立自動化時手動選擇觸發條件
+- 使用者可以自由選擇任何裝置和動作作為觸發來源
+- 更符合 Home Assistant 的使用習慣
+- 提供更大的靈活性
+
+**修改的檔案：**
+- `zbmini_tri_step_dim_or_off.yaml`
+- `zbmini_tri_step_dim_or_off_z2m.yaml`
+- `README.md`
+- `QUICKSTART.md`
+
+**技術細節：**
+```yaml
+# 修改前
+input:
+  zbmini_device:
+    name: ZBMini R2 Device
+    selector:
+      device:
+        integration: zha
+
+trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input zbmini_device
+
+# 修改後
+input:
+  # 移除裝置選擇器
+
+trigger: []  # 空的 trigger，由使用者在 UI 中手動新增
+```
+
+**使用方式：**
+建立自動化時：
+1. 選擇藍圖
+2. **手動新增觸發條件** → 裝置 → 選擇 ZBMini R2 → 選擇動作
+3. 填寫其他參數（燈光、timer、亮度）
+
+---
+
+## 2025-10-03 更新 v1
 
 ### 修正 1：單次切動行為
 **問題：** 原本單次切動會「關燈」，但這不符合一般開關的使用邏輯。
