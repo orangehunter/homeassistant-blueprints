@@ -67,9 +67,13 @@ trigger:
     device_id: !input zbmini_device
     domain: mqtt
     type: action
-    subtype: single
-  # ... (其他 trigger)
+    subtype: toggle
 ```
+
+**為什麼只用 toggle subtype？**
+- 實際使用中，只需要偵測任何開關動作即可
+- 簡化設定，避免重複的 trigger
+- 符合實際使用情境
 
 ---
 

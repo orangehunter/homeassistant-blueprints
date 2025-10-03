@@ -66,21 +66,6 @@ trigger:
     device_id: !input zbmini_device
     domain: mqtt
     type: action
-    subtype: single
-  - platform: device
-    device_id: !input zbmini_device
-    domain: mqtt
-    type: action
-    subtype: on
-  - platform: device
-    device_id: !input zbmini_device
-    domain: mqtt
-    type: action
-    subtype: off
-  - platform: device
-    device_id: !input zbmini_device
-    domain: mqtt
-    type: action
     subtype: toggle
 
 action:
