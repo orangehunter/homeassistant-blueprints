@@ -88,7 +88,7 @@ timer:
 2. 找到 **ZBMini R2 Tri-Step Dimming or Off** 藍圖
 3. 點擊 **建立自動化**
 4. 設定以下參數：
-   - **ZBMini R2 Device**（ZHA）或 **MQTT Topic**（Z2M）：選擇你的 ZBMini 裝置
+   - **ZBMini R2 Device**：選擇你的 ZBMini R2 裝置（ZHA 或 Zigbee2MQTT 都使用裝置選擇器）
    - **Target Light**：選擇要控制的燈光
    - **Timer Entity**：選擇你建立的 timer（例如：`timer.zbmini_switch_timer`）
    - **Brightness Levels**：自訂亮度（例如：`30,60,100` 或 `20,50,80`）

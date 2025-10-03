@@ -9,11 +9,14 @@ blueprint:
     This blueprint uses a timer entity to avoid conflicts between multiple devices.
   domain: automation
   input:
-    zbmini_topic:
-      name: ZBMini R2 MQTT Topic
-      description: The MQTT topic for your ZBMini R2 (e.g., zigbee2mqtt/zbmini_living_room)
+    zbmini_device:
+      name: ZBMini R2 Device
+      description: Select the ZBMini R2 device (Zigbee2MQTT)
       selector:
-        text:
+        device:
+          integration: mqtt
+          manufacturer: SONOFF
+          model: ZBMINIR2
     target_light:
       name: Target Light
       description: The light entity to control
@@ -59,13 +62,26 @@ variables:
     {{ brightness_list[next_brightness_index] }}
 
 trigger:
-  - platform: mqtt
-    topic: !input zbmini_topic
-
-condition:
-  - condition: template
-    value_template: >
-      {{ trigger.payload_json.action in ['on', 'off', 'single', 'toggle'] }}
+  - platform: device
+    device_id: !input zbmini_device
+    domain: mqtt
+    type: action
+    subtype: single
+  - platform: device
+    device_id: !input zbmini_device
+    domain: mqtt
+    type: action
+    subtype: on
+  - platform: device
+    device_id: !input zbmini_device
+    domain: mqtt
+    type: action
+    subtype: off
+  - platform: device
+    device_id: !input zbmini_device
+    domain: mqtt
+    type: action
+    subtype: toggle
 
 action:
   - choose:
